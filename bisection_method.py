@@ -1,6 +1,10 @@
 import math
 import numpy as np
 from colors import bcolors
+import sympy as sp
+from sympy import *
+from sympy.utilities.lambdify import lambdify
+
 
 """
 Receives 3 parameters:
@@ -27,12 +31,30 @@ Returns variables:
     1.  c - The approximate root of the function f
 """
 def bisection_method(f, a, b, tol=1e-6):
+    h = sp.diff(f)
+    f = lambdify(x,f)
+    z = f
+    flag = False
+    K = []
+    A = []
+    B = []
+    C = []
+    F_a = []
+    F_b = []
+    F_c = []
+
     if np.sign(f(a)) == np.sign(f(b)):
-        raise Exception("The scalars a and b do not bound a root")
+        h = lambdify(x, h)
+        if np.sign(h(a)) == np.sign(h(b)):
+            raise Exception("The scalars a and b do not bound a root")
+        else:
+            f = h
+            flag = True
+
     c, k = 0, 0
     steps = max_steps(a, b, tol)  # calculate the max steps possible
 
-    print("{:<10} {:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format("Iteration", "a", "b", "f(a)", "f(b)", "c", "f(c)"))
+    #print("{:<10} {:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format("Iteration", "a", "b", "f(a)", "f(b)", "c", "f(c)"))
 
     # while the diff af a&b is not smaller than tol, and k is not greater than the max possible steps
     while abs(b - a) > tol and k < steps:
@@ -46,15 +68,45 @@ def bisection_method(f, a, b, tol=1e-6):
         else:
             a = c  # move backward
 
-        print("{:<10} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f}".format(k, a, b, f(a), f(b), c, f(c)))
+        #print("{:<10} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f}".format(k, a, b, f(a), f(b), c, f(c)))
+        #saving the data
+        K.append(k)
+        A.append(a)
+        B.append(b)
+        C.append(c)
+        F_a.append(f(a))
+        F_b.append(f(b))
+        F_c.append(f(c))
+
         k += 1
+
+    if flag:  #check if that a derivative function
+        if abs(z(c)) > 0.0001:  #check if it real a root in the source function if not it will raise exception
+            raise Exception("The scalars a and b do not bound a root")
+
+    #print the data
+    print("{:<10} {:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format("Iteration", "a", "b", "f(a)", "f(b)", "c", "f(c)"))
+    for i in range(k):
+        print("{:<10} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f} {:<15.6f}".format(K[i], A[i], B[i], F_a[i], F_b[i], C[i], F_c[i]))
 
     return c  # return the current root
 
 
 
 if __name__ == '__main__':
-    f = lambda x: x**2 - 4 * math.sin(x)
-    g = lambda x: x**2 -4
-    roots = bisection_method(f, 1, 3)
-    print(bcolors.OKBLUE, f"\nThe equation f(x) has an approximate root at x = {roots}",bcolors.ENDC,)
+    x = sp.symbols('x')
+    f = x**2 - 4 * sin(x)
+    g = (x-2)**2
+    a = -1
+    b = 3
+    jump = (b-a)/10
+    i=a+jump
+    while i<=b:
+        try:
+            roots = bisection_method(f, a, i)
+            print(bcolors.OKBLUE, f"\nThe equation f(x) has an approximate root at x = {roots}",bcolors.ENDC,)
+            print()
+        except Exception:
+            print(f"none roots between ({a})-({i})\n")
+        a = i
+        i = i + jump
