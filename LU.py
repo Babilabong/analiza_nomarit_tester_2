@@ -84,4 +84,7 @@ if __name__ == '__main__':
            [1, 1, 1, 0, -2],
            [1, -1, 4, 3, 4]]
 
+    print(f"the input matrix is {A_b}")
+    print("https://github.com/Babilabong/analiza_nomarit_tester_2\ngroup:Almog Babila 209477678, Hai karmi 207265678, Yagel Batito 318271863, Meril Hasid 318271863\nstudent:Almog Babila 209477678")
+
     lu_solve(A_b)

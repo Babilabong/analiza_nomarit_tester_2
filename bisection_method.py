@@ -99,6 +99,8 @@ if __name__ == '__main__':
     g = (x-2)**2
     a = -1
     b = 3
+    print(f"the input function is {f} and the limts is {a} and {b}")
+    print("https://github.com/Babilabong/analiza_nomarit_tester_2\ngroup:Almog Babila 209477678, Hai karmi 207265678, Yagel Batito 318271863, Meril Hasid 318271863\nstudent:Almog Babila 209477678")
     jump = (b-a)/10
     i=a+jump
     while i<=b:

@@ -85,6 +85,9 @@ if __name__ == "__main__":
     A = np.array([[3, 1, 1], [1, 1, 3], [1, 3, 1]])
     b = np.array([7, 7, 11])
 
+    print(f"the input matrix is \n{A}\nand the input vector is {b}")
+    print("https://github.com/Babilabong/analiza_nomarit_tester_2\ngroup:Almog Babila 209477678, Hai karmi 207265678, Yagel Batito 318271863, Meril Hasid 318271863\nstudent:Almog Babila 209477678")
+
     x = np.zeros_like(b, dtype=np.double)
     solution = jacobi_iterative(A, b, x)
 
